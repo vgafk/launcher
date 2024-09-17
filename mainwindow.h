@@ -21,6 +21,8 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     bool checkUpdate();
+    void runExecutable();
+    bool setBase();
 
 private:
     Ui::MainWindow *ui;
@@ -33,7 +35,6 @@ private:
     QSqlDatabase m_base;
     const QString m_defExecutable;
 
-    bool setBase();
     bool connectToBase(QPair<QString, int> server);
     QPair<QString, int> serverAddress(Server server);
     void saveServer(QString host, int port);
@@ -44,6 +45,5 @@ private:
     bool updateFile(QString fileName);
     bool downloadFile(QFile &f);
     void updateVersion(const QString &name, const FileVersion *version) const;
-    void runExecutable();
 };
 #endif // MAINWINDOW_H

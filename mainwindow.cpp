@@ -12,10 +12,6 @@ MainWindow::MainWindow(QWidget *parent)
     ,m_defExecutable("teacher_plan.exe")
 {
     ui->setupUi(this);
-
-    setBase();
-    checkUpdate();
-    runExecutable();
 }
 
 MainWindow::~MainWindow()
