@@ -37,6 +37,7 @@ private:
     bool connectToBase(QPair<QString, int> server);
     QPair<QString, int> serverAddress(Server server);
     void saveServer(QString host, int port);
+    void saveExecutableFileName(QString fileName);
     VersionList baseFileList();
     VersionList localFileList();
     bool checkLockalVersion(VersionList);

@@ -6,8 +6,6 @@
 #include <QSqlError>
 #include <QProcess>
 
-
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -25,7 +23,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
 bool MainWindow::setBase()
 {
     m_base = QSqlDatabase::addDatabase("QMYSQL");
@@ -39,6 +36,7 @@ bool MainWindow::setBase()
         }
     }
     saveServer(m_base.hostName(), m_base.port());
+    saveExecutableFileName(m_defExecutable);
     return true;
 }
 
@@ -65,6 +63,12 @@ void MainWindow::saveServer(QString host, int port)
      QSettings s("settings.ini", QSettings::IniFormat);
      s.setValue("dbHost", host);
      s.setValue("dbPort", port);
+}
+
+void MainWindow::saveExecutableFileName(QString fileName)
+{
+    QSettings s("settings.ini", QSettings::IniFormat);
+    s.setValue("executable", fileName);
 }
 
 QMap<QString, FileVersion*> MainWindow::baseFileList()
