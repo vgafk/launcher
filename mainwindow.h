@@ -5,6 +5,8 @@
 #include <QMap>
 #include <QSqlDatabase>
 #include <QFile>
+#include <QUrl>
+
 #include "fileversion.h"
 
 using VersionList = QMap<QString, FileVersion*>;
@@ -21,7 +23,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     bool checkUpdate();
-    void runExecutable();
+    bool runExecutable();
     bool setBase();
 
 private:
@@ -35,8 +37,8 @@ private:
     QSqlDatabase m_base;
     const QString m_defExecutable;
 
-    bool connectToBase(QPair<QString, int> server);
-    QPair<QString, int> serverAddress(Server server);
+    bool connectToBase(QUrl server);
+    QUrl serverAddress(Server server);
     void saveServer(QString host, int port);
     void saveExecutableFileName(QString fileName);
     VersionList baseFileList();

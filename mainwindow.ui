@@ -16,9 +16,19 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QLabel" name="label">
+     <widget class="QLabel" name="lbl_info">
       <property name="text">
-       <string>При обновлении программы произошла ошибка, обратитесь в компьютерный центр</string>
+       <string>Выполняется проверка обновлений</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="lbl_error">
+      <property name="text">
+       <string>Ошибок нет</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
