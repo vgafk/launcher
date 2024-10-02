@@ -6,10 +6,12 @@
 #include <QSqlDatabase>
 #include <QFile>
 #include <QUrl>
+#include <QNetworkAccessManager>
 
 #include "fileversion.h"
 
-using VersionList = QMap<QString, FileVersion*>;
+using RemoteList = QMap<int, FileVersion*>;
+using LocalList = QMap<QString, FileVersion*>;
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -22,9 +24,13 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    bool checkUpdate();
+    bool checkSqlBase();
     bool runExecutable();
-    bool setBase();
+    void checkFiles();
+
+private slots:
+    void checkUpdate(QNetworkReply *reply);
+    void saveFile(QNetworkReply *reply);
 
 private:
     Ui::MainWindow *ui;
@@ -34,18 +40,28 @@ private:
         Remote
     };
 
+    enum Endpoint{
+        List,
+        Download
+    };
+
     QSqlDatabase m_base;
     const QString m_defExecutable;
+    const QString m_localFileListEndpoint;
+    const QString m_localDownloadEndpoint;
+    const QString m_internalFileListEndpoint;
+    const QString m_internalDownloadEndpoint;
+
+    QNetworkAccessManager *m_manager;
+    Server m_currentServer;
 
     bool connectToBase(QUrl server);
     QUrl serverAddress(Server server);
     void saveServer(QString host, int port);
     void saveExecutableFileName(QString fileName);
-    VersionList baseFileList();
-    VersionList localFileList();
-    bool checkLockalVersion(VersionList);
-    bool updateFile(QString fileName);
-    bool downloadFile(QFile &f);
-    void updateVersion(const QString &name, const FileVersion *version) const;
+    LocalList localFileList();
+    void updateVersion(const FileVersion *version) const;
+    void compareFiles(LocalList local, RemoteList remote);
+    const QString &getEndpoint(Server server, Endpoint endpoint);
 };
 #endif // MAINWINDOW_H
