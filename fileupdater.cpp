@@ -149,6 +149,7 @@ void FileUpdater::compareFiles(LocalList local, RemoteList remote)
             connect(reply, &QNetworkReply::finished, this, &FileUpdater::saveFile);
         }
     }
+    checkComplited();
 }
 
 void FileUpdater::saveFile()
