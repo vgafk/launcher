@@ -8,6 +8,7 @@
 #include <QNetworkAccessManager>
 
 #include "fileversion.h"
+#include "types.h"
 
 class QNetworkReply;
 
@@ -18,18 +19,18 @@ class FileUpdater : public QThread
 {
     Q_OBJECT
 public:
-    explicit FileUpdater(QVector<QUrl> servers, QObject *parent = nullptr);
+    explicit FileUpdater(QMap<ServerType, QUrl> servers, QObject *parent = nullptr);
     ~FileUpdater() {}
 
     void run() override;
 
 signals:
     void message(QString, bool);
-    void serverChanged(QUrl);
+    void serverChanged(ServerType);
     void complited();
 
 private:
-    QVector<QUrl> m_serverList;
+    QMap<ServerType, QUrl> m_serverList;
 
     enum Endpoint{
         FileList,

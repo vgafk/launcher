@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(launcher VERSION 0.1 LANGUAGES CXX)
+project(launcher VERSION 1.0 LANGUAGES CXX)
 
 include(cmake/Variables.cmake)
 
@@ -22,9 +22,18 @@ set(PRJ_SRCS)
 file(GLOB_RECURSE PRJ_SRCS0 "*.h" "*.cpp" "*.ui")
 list(APPEND PRJ_SRCS ${PRJ_SRCS0})
 
+
+
+IF(WIN32)
 add_executable(launcher
     ${PROJECT_SOURCES}
-)
+    rc/app_icon.rc
+    )
+else()
+    add_executable(launcher
+        ${PROJECT_SOURCES}
+        )
+endif()
 
 target_sources(${PROJECT_NAME} PRIVATE ${PRJ_SRCS} ${PRJ_UIS} ${PRJ_RESOURCES} ${QM_FILES})
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR})
@@ -33,18 +42,20 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR})
 set_target_properties(launcher PROPERTIES
     ${BUNDLE_ID_OPTION}
     WIN32_EXECUTABLE TRUE
-)
+    )
 
 target_link_libraries(launcher
     PRIVATE
     Qt5::Widgets
     Qt5::Sql
     Qt5::Network
-)
+    )
 
 include(GNUInstallDirs)
 install(TARGETS launcher
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-)
+    )
+
+

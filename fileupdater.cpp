@@ -11,11 +11,11 @@
 
 #define TIMER_TIMEUOT 5000
 
-FileUpdater::FileUpdater(QVector<QUrl> servers, QObject *parent)
+FileUpdater::FileUpdater(QMap<ServerType, QUrl> servers, QObject *parent)
     : QThread{parent}
     , m_manager(new QNetworkAccessManager)
 {
-    m_serverList.append(servers);
+    m_serverList.insert(servers);
 
     m_endpoints.insert(FileList, "/files");
     m_endpoints.insert(Download, "/download");
@@ -30,12 +30,17 @@ void FileUpdater::run()
 
 void FileUpdater::selectDatabase()
 {
-    for(const auto &url : qAsConst(m_serverList)){
-        if(checkDatabase(url))
+    for(auto it = m_serverList.begin(); it != m_serverList.end(); ++it){
+        auto type = it.key();
+        auto url = it.value();
+        if(checkDatabase(url)){
+            emit serverChanged(type);
+            emit message(QString("Выбран сервер %1").arg(url.host()), false);
             return;
+        }
     }
 
-    emit serverChanged(QUrl());
+    emit serverChanged(ServerType::Empty);
     emit message("Серверы не доступны, обратитесь в компьютерный центр", true);
 }
 
@@ -63,8 +68,6 @@ bool FileUpdater::checkDatabase(const QUrl &url)
     bool avalible;
     if (reply->error() == QNetworkReply::NoError){
         m_currentDatabase = url;
-        emit message(QString("Выбран сервер %1").arg(m_currentDatabase.host()), false);
-        emit serverChanged(m_currentDatabase);
         avalible = true;
     } else {
         emit message(reply->errorString(), true);
@@ -169,7 +172,6 @@ void FileUpdater::saveFile()
     int minor = reply->rawHeader("X-Version-Minor").toInt();
     int subminor = reply->rawHeader("X-Version-Subminor").toInt();
 
-    // Сохраняем файл
     QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly)) {
         emit message("Не удалось открыть файл для записи:", true);
@@ -177,13 +179,11 @@ void FileUpdater::saveFile()
         return;
     }
 
-    // Записываем данные в файл
     file.write(reply->readAll());
     file.close();
 
-    // Выводим информацию о версиях
     emit message(QString("Файл сохранен как: %1, версия: %2.%3.%4.%5")
-                     .arg(fileName).arg(major).arg(submajor).arg(minor).arg(subminor), false);
+                 .arg(fileName).arg(major).arg(submajor).arg(minor).arg(subminor), false);
     updateVersion(new FileVersion(fileName, major, submajor, minor, subminor, this));
     m_replyes.removeOne(reply);
     reply->deleteLater();

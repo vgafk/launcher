@@ -10,11 +10,4 @@ int main(int argc, char *argv[])
     w.show();
     w.updateFiles();
     return a.exec();
-
-    // } else {
-    // if(w.checkSqlBase()){
-    //     w.checkFiles();
-    //     if(w.runExecutable())
-    //         exit(0);
-    // }
 }

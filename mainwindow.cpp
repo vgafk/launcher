@@ -20,10 +20,12 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    m_updater = new FileUpdater({
-        getServer("10.0.2.18", 8100),
-        getServer("83.167.69.146", 5807)
-    });
+    m_updater = new FileUpdater({{Remote, getServer("83.167.69.146", 5807)},
+                                 {Local, getServer("10.0.2.18", 8100)}
+                                });
+
+    m_servers.insert(Local, getServer("10.0.2.18", 3306));
+    m_servers.insert(Remote, getServer("83.167.69.146", 5806));
 }
 
 MainWindow::~MainWindow()
@@ -49,11 +51,12 @@ void MainWindow::addLog(QString msg, bool error)
     ui->lw_log->addItem(item);
 }
 
-void MainWindow::saveServer(QUrl url)
+void MainWindow::saveServer(ServerType type)
 {
-    if(url.host().isEmpty())
+    if(type == ServerType::Empty)
         return;
 
+    auto url = m_servers.value(type);
     QSettings s("settings.ini", QSettings::IniFormat);
     s.setValue("dbHost", url.host());
     s.setValue("dbPort", url.port());
@@ -79,8 +82,10 @@ void MainWindow::runExecutable()
     addLog("Запуск...", false);
     QSettings settings("settings.ini", QSettings::IniFormat);
     auto file = settings.value("executable", m_defExecutable).toString();
-    if(QProcess::startDetached(file, QStringList()))
+    if(QProcess::startDetached(file, QStringList())){
+        saveExecutableFileName(file);
         this->close();
-    else
+    }else{
         addLog("Ошибка запуска исполняемого файла", true);
+    }
 }
