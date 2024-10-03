@@ -26,7 +26,7 @@ public:
     bool operator!=(const FileVersion &other) const;
     void operator=(const FileVersion &other);
 
-    bool operator <(const FileVersion *other);
+    bool operator<(const FileVersion *other);
 
     int versionMajor() const;
     int versionSubmajor() const;

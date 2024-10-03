@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>362</width>
-    <height>117</height>
+    <height>165</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,27 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QLabel" name="lbl_info">
-      <property name="text">
-       <string>Выполняется проверка обновлений</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="lbl_error">
-      <property name="text">
-       <string>Ошибок нет</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-      <property name="wordWrap">
-       <bool>true</bool>
-      </property>
-     </widget>
+     <widget class="QListWidget" name="lw_log"/>
     </item>
    </layout>
   </widget>

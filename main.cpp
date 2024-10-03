@@ -8,11 +8,13 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     MainWindow w;
     w.show();
-    // } else {
-    if(w.checkSqlBase()){
-        w.checkFiles();
-        if(w.runExecutable())
-            exit(0);
-    }
+    w.updateFiles();
     return a.exec();
+
+    // } else {
+    // if(w.checkSqlBase()){
+    //     w.checkFiles();
+    //     if(w.runExecutable())
+    //         exit(0);
+    // }
 }

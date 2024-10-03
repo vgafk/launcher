@@ -42,13 +42,13 @@ void FileVersion::operator=(const FileVersion &other){
 
 bool FileVersion::operator<(const FileVersion *other)
 {
-    if (other->versionMajor() > versionMajor()) return true;
-    if (other->versionMajor() < versionMajor()) return false;
-    if (other->versionSubmajor() > versionSubmajor()) return true;
-    if (other->versionSubmajor() < versionSubmajor()) return false;
-    if (other->versionMinor() > versionMinor()) return true;
-    if (other->versionMinor() < versionMinor()) return false;
-    return other->versionSubminor() > versionSubminor();
+    if (other->versionMajor() > m_versionMajor) return true;
+    if (other->versionMajor() < m_versionMajor) return false;
+    if (other->versionSubmajor() > m_versionSubmajor) return true;
+    if (other->versionSubmajor() < m_versionSubmajor) return false;
+    if (other->versionMinor() > m_versionMinor) return true;
+    if (other->versionMinor() < m_versionMinor) return false;
+    return other->versionSubminor() > m_versionSubminor;
 }
 
 int FileVersion::versionMajor() const
