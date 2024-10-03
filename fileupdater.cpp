@@ -184,9 +184,16 @@ void FileUpdater::saveFile()
     // Выводим информацию о версиях
     emit message(QString("Файл сохранен как: %1, версия: %2.%3.%4.%5")
                      .arg(fileName).arg(major).arg(submajor).arg(minor).arg(subminor), false);
-    // updateVersion(new FileVersion(fileName, major, submajor, minor, subminor, this));
+    updateVersion(new FileVersion(fileName, major, submajor, minor, subminor, this));
     m_replyes.removeOne(reply);
     reply->deleteLater();
 
     checkComplited();
+}
+
+void FileUpdater::updateVersion(const FileVersion *version) const
+{
+    QSettings settings("settings.ini", QSettings::IniFormat);
+    settings.beginGroup("file_version");
+    settings.setValue(version->name(), version->toString());
 }

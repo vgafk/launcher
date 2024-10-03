@@ -49,6 +49,7 @@ private:
     void checkComplited();
     void compareFiles(LocalList local, RemoteList remote);
     void saveFile();
+    void updateVersion(const FileVersion* version) const;
 };
 
 #endif // FILEUPDATER_H
